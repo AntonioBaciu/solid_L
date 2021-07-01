@@ -1,0 +1,23 @@
+{
+  "name": "solid_l",
+  "version": "1.0.0",
+  "description": "\"Objects in a program should be replaceable with instances of their subtypes without altering the correctness of that program.\" See also [design by contract](https://en.wikipedia.org/wiki/Design_by_contract).",
+  "main": "new.js",
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AntonioBaciu/solid_L.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AntonioBaciu/solid_L/issues"
+  },
+  "homepage": "https://github.com/AntonioBaciu/solid_L#readme",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5"
+  }
+}
