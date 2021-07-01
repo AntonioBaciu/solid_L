@@ -1,4 +1,19 @@
 # solid_L
+### Working steps:
+
+- Create the work environment
+- Divide code into classes
+- Research **import** / **interface** / **implements**
+- Create constructors for the classes
+
+### Documentation:
+
+**TS Modules:** [https://www.typescriptlang.org/docs/handbook/modules.html#import](https://www.typescriptlang.org/docs/handbook/modules.html#import)
+
+**Interfaces:** [https://www.youtube.com/watch?v=VbW6vWTaHOY&t=131s](https://www.youtube.com/watch?v=VbW6vWTaHOY&t=131s)
+
+**Liskov substitution principle** [https://www.youtube.com/watch?v=ObHQHszbIcE](https://www.youtube.com/watch?v=ObHQHszbIcE)
+
 
 # Liskov substitution principle
 "Objects in a program should be replaceable with instances of their subtypes without altering the correctness of that program." See also [design by contract](https://en.wikipedia.org/wiki/Design_by_contract).
