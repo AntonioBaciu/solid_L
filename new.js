@@ -1,44 +1,47 @@
 "use strict";
-var Discount = /** @class */ (function () {
-    function Discount(type, value) {
-        if (value === void 0) { value = 0; }
-        this._type = type;
-        this._value = value;
-        if (this._type != "none" && value <= 0) {
-            throw new Error("You cannot create a " + this._type + " discount with a negative value");
-        }
-    }
-    Discount.prototype.apply = function (price) {
-        //@todo: instead of using magic values as string in this, it would be a lot better to change them into constant. This would protect us from misspellings. Can you improve this?
-        if (this._type === "none") {
-            return price;
-        }
-        else if (this._type === "variable") {
-            return price - (price * this._value) / 100;
-        }
-        else if (this._type === "fixed") {
-            return Math.max(0, price - this._value);
-        }
-        else {
-            throw new Error("Invalid type of discount");
-        }
-    };
-    Discount.prototype.showCalculation = function (price) {
-        if (this._type === "none") {
-            return "No discount";
-        }
-        else if (this._type === "variable") {
-            return price + " € -  " + this._value + "%";
-        }
-        else if (this._type === "fixed") {
-            return price + "€ -  " + this._value + "€ (min 0 €)";
-        }
-        else {
-            throw new Error("Invalid type of discount");
-        }
-    };
-    return Discount;
-}());
+Object.defineProperty(exports, "__esModule", { value: true });
+var FixedDiscount_1 = require("./classes/FixedDiscount");
+var NoDiscount_1 = require("./classes/NoDiscount");
+var VariableDIscount_1 = require("./classes/VariableDIscount");
+//This is called a Union, the discountType can only contain the following 2 values:
+// type discountType = "variable" | "fixed" | "none";
+// class Discount {
+//   private _type: discountType;
+//   private _value: number;
+//   constructor(type: discountType, value: number = 0) {
+//     this._type = type;
+//     this._value = value;
+//     if (this._type != "none" && value <= 0) {
+//       throw new Error(
+//         "You cannot create a " + this._type + " discount with a negative value"
+//       );
+//     }
+//   }
+//   apply(price: number): number {
+//     //@todo: instead of using magic values as string in this, it would be a lot better to change them into constant. This would protect us from misspellings. Can you improve this?
+//     if (this._type === "none") {
+//       return price;
+//     } else if (this._type === "variable") {
+//       return price - (price * this._value) / 100;
+//     } else if (this._type === "fixed") {
+//       return Math.max(0, price - this._value);
+//     } else {
+//       throw new Error("Invalid type of discount");
+//     }
+//   }
+//   showCalculation(price: number): string {
+//     if (this._type === "none") {
+//       return "No discount";
+//     } else if (this._type === "variable") {
+//       return price + " € -  " + this._value + "%";
+//     } else if (this._type === "fixed") {
+//       return price + "€ -  " + this._value + "€ (min 0 €)";
+//     } else {
+//       throw new Error("Invalid type of discount");
+//     }
+//   }
+// }
+/////////////////////////////////////////
 var Product = /** @class */ (function () {
     function Product(name, price, discount) {
         this._name = name;
@@ -93,11 +96,14 @@ var shoppingBasket = /** @class */ (function () {
     };
     return shoppingBasket;
 }());
+// The new object was created in relation with the Discount class.
+// Since I have a Discount interface that is implemented in the rest of the classes ( fix, no, variable DISCOUNT)
+// I used the constructor of those classes to create a new FixedDiscount(10), VariableDiscount(25) & NoDiscount()
 var cart = new shoppingBasket();
-cart.addProduct(new Product("Chair", 25, new Discount("fixed", 10)));
+cart.addProduct(new Product("Chair", 25, new FixedDiscount_1.FixedDiscount(10)));
 //cart.addProduct(new Product('Chair', 25, new Discount("fixed", -10)));
-cart.addProduct(new Product("Table", 50, new Discount("variable", 25)));
-cart.addProduct(new Product("Bed", 100, new Discount("none")));
+cart.addProduct(new Product("Table", 50, new VariableDIscount_1.VariableDiscount(25)));
+cart.addProduct(new Product("Bed", 100, new NoDiscount_1.NoDiscount())); // we don't have so specify any parameter since the constructor function has no parameter
 var tableElement = document.querySelector("#cart tbody");
 cart.products.forEach(function (product) {
     var tr = document.createElement("tr");

@@ -117,52 +117,139 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"new.js":[function(require,module,exports) {
+})({"classes/FixedDiscount.js":[function(require,module,exports) {
 "use strict";
 
-var Discount =
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.FixedDiscount = void 0; // Inside the class, use the same PROPERTIES & METHODS from the interface. -> this applies for the next 2 classes too
+// This class will only return the fixed discount [apply()] & return the calculated price [showCalculation()]
+
+var FixedDiscount =
 /** @class */
 function () {
-  function Discount(type, value) {
-    if (value === void 0) {
-      value = 0;
-    }
-
-    this._type = type;
+  function FixedDiscount(value) {
     this._value = value;
-
-    if (this._type != "none" && value <= 0) {
-      throw new Error("You cannot create a " + this._type + " discount with a negative value");
-    }
   }
 
-  Discount.prototype.apply = function (price) {
-    //@todo: instead of using magic values as string in this, it would be a lot better to change them into constant. This would protect us from misspellings. Can you improve this?
-    if (this._type === "none") {
-      return price;
-    } else if (this._type === "variable") {
-      return price - price * this._value / 100;
-    } else if (this._type === "fixed") {
-      return Math.max(0, price - this._value);
-    } else {
-      throw new Error("Invalid type of discount");
-    }
+  FixedDiscount.prototype.apply = function (price) {
+    return Math.max(0, price - this._value);
   };
 
-  Discount.prototype.showCalculation = function (price) {
-    if (this._type === "none") {
-      return "No discount";
-    } else if (this._type === "variable") {
-      return price + " € -  " + this._value + "%";
-    } else if (this._type === "fixed") {
-      return price + "€ -  " + this._value + "€ (min 0 €)";
-    } else {
-      throw new Error("Invalid type of discount");
-    }
+  FixedDiscount.prototype.showCalculation = function (price) {
+    return price + "€ -  " + this._value + "€ (min 0 €)";
   };
 
-  return Discount;
+  return FixedDiscount;
 }();
+
+exports.FixedDiscount = FixedDiscount;
+},{}],"classes/NoDiscount.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.NoDiscount = void 0;
+
+var NoDiscount =
+/** @class */
+function () {
+  function NoDiscount() {
+    this._value = 0; // in the constructor value = 0 because there is no discount
+  }
+
+  NoDiscount.prototype.apply = function (price) {
+    return price;
+  };
+
+  NoDiscount.prototype.showCalculation = function (price) {
+    return "No discount";
+  };
+
+  return NoDiscount;
+}();
+
+exports.NoDiscount = NoDiscount;
+},{}],"classes/VariableDIscount.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.VariableDiscount = void 0;
+
+var VariableDiscount =
+/** @class */
+function () {
+  function VariableDiscount(value) {
+    this._value = value;
+  }
+
+  VariableDiscount.prototype.apply = function (price) {
+    return price - price * this._value / 100;
+  };
+
+  VariableDiscount.prototype.showCalculation = function (price) {
+    return price + " € -  " + this._value + "%";
+  };
+
+  return VariableDiscount;
+}();
+
+exports.VariableDiscount = VariableDiscount;
+},{}],"new.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var FixedDiscount_1 = require("./classes/FixedDiscount");
+
+var NoDiscount_1 = require("./classes/NoDiscount");
+
+var VariableDIscount_1 = require("./classes/VariableDIscount"); //This is called a Union, the discountType can only contain the following 2 values:
+// type discountType = "variable" | "fixed" | "none";
+// class Discount {
+//   private _type: discountType;
+//   private _value: number;
+//   constructor(type: discountType, value: number = 0) {
+//     this._type = type;
+//     this._value = value;
+//     if (this._type != "none" && value <= 0) {
+//       throw new Error(
+//         "You cannot create a " + this._type + " discount with a negative value"
+//       );
+//     }
+//   }
+//   apply(price: number): number {
+//     //@todo: instead of using magic values as string in this, it would be a lot better to change them into constant. This would protect us from misspellings. Can you improve this?
+//     if (this._type === "none") {
+//       return price;
+//     } else if (this._type === "variable") {
+//       return price - (price * this._value) / 100;
+//     } else if (this._type === "fixed") {
+//       return Math.max(0, price - this._value);
+//     } else {
+//       throw new Error("Invalid type of discount");
+//     }
+//   }
+//   showCalculation(price: number): string {
+//     if (this._type === "none") {
+//       return "No discount";
+//     } else if (this._type === "variable") {
+//       return price + " € -  " + this._value + "%";
+//     } else if (this._type === "fixed") {
+//       return price + "€ -  " + this._value + "€ (min 0 €)";
+//     } else {
+//       throw new Error("Invalid type of discount");
+//     }
+//   }
+// }
+/////////////////////////////////////////
+
 
 var Product =
 /** @class */
@@ -228,13 +315,17 @@ function () {
   };
 
   return shoppingBasket;
-}();
+}(); // The new object was created in relation with the Discount class.
+// Since I have a Discount interface that is implemented in the rest of the classes ( fix, no, variable DISCOUNT)
+// I used the constructor of those classes to create a new FixedDiscount(10), VariableDiscount(25) & NoDiscount()
+
 
 var cart = new shoppingBasket();
-cart.addProduct(new Product("Chair", 25, new Discount("fixed", 10))); //cart.addProduct(new Product('Chair', 25, new Discount("fixed", -10)));
+cart.addProduct(new Product("Chair", 25, new FixedDiscount_1.FixedDiscount(10))); //cart.addProduct(new Product('Chair', 25, new Discount("fixed", -10)));
 
-cart.addProduct(new Product("Table", 50, new Discount("variable", 25)));
-cart.addProduct(new Product("Bed", 100, new Discount("none")));
+cart.addProduct(new Product("Table", 50, new VariableDIscount_1.VariableDiscount(25)));
+cart.addProduct(new Product("Bed", 100, new NoDiscount_1.NoDiscount())); // we don't have so specify any parameter since the constructor function has no parameter
+
 var tableElement = document.querySelector("#cart tbody");
 cart.products.forEach(function (product) {
   var tr = document.createElement("tr");
@@ -252,7 +343,7 @@ cart.products.forEach(function (product) {
   tr.appendChild(td);
   tableElement.appendChild(tr);
 });
-},{}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./classes/FixedDiscount":"classes/FixedDiscount.js","./classes/NoDiscount":"classes/NoDiscount.js","./classes/VariableDIscount":"classes/VariableDIscount.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
