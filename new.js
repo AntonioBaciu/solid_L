@@ -3,45 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var FixedDiscount_1 = require("./classes/FixedDiscount");
 var NoDiscount_1 = require("./classes/NoDiscount");
 var VariableDIscount_1 = require("./classes/VariableDIscount");
-//This is called a Union, the discountType can only contain the following 2 values:
-// type discountType = "variable" | "fixed" | "none";
-// class Discount {
-//   private _type: discountType;
-//   private _value: number;
-//   constructor(type: discountType, value: number = 0) {
-//     this._type = type;
-//     this._value = value;
-//     if (this._type != "none" && value <= 0) {
-//       throw new Error(
-//         "You cannot create a " + this._type + " discount with a negative value"
-//       );
-//     }
-//   }
-//   apply(price: number): number {
-//     //@todo: instead of using magic values as string in this, it would be a lot better to change them into constant. This would protect us from misspellings. Can you improve this?
-//     if (this._type === "none") {
-//       return price;
-//     } else if (this._type === "variable") {
-//       return price - (price * this._value) / 100;
-//     } else if (this._type === "fixed") {
-//       return Math.max(0, price - this._value);
-//     } else {
-//       throw new Error("Invalid type of discount");
-//     }
-//   }
-//   showCalculation(price: number): string {
-//     if (this._type === "none") {
-//       return "No discount";
-//     } else if (this._type === "variable") {
-//       return price + " € -  " + this._value + "%";
-//     } else if (this._type === "fixed") {
-//       return price + "€ -  " + this._value + "€ (min 0 €)";
-//     } else {
-//       throw new Error("Invalid type of discount");
-//     }
-//   }
-// }
-/////////////////////////////////////////
 var Product = /** @class */ (function () {
     function Product(name, price, discount) {
         this._name = name;
